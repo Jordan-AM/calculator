@@ -9,24 +9,27 @@ html {
     box-sizing: inherit;
     margin: 0;
     padding: 0;
+    font-weight: bold;
 }
 
 body {
     font-family: Impact, sans-serif;
-    background: linear-gradient(120deg, #76e620, #fdd9d9, #e6d620);
+    background: linear-gradient(90deg, rgb(67, 161, 255), skyblue, rgb(183, 219, 231));
     display: flex;
-    height: inherit;
+    height: 100%;
     align-items: center;
     justify-content: center;
 }
 
 .calculator {
-    background: rgba(255, 255, 255, 0.3);
+    background:rgba(90, 225, 90, 0.5);
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(35, 35, 35, 0.2);
+    box-shadow: 
+    0 4px 10px 5px inset rgba(35, 35, 35, 0.2), 
+    0 5px 10px  rgba(01, 01, 01, 0.1);
     color: darkslategray;
-    flex-basis: 400px;
+    flex-basis: 420px;
     height: 540px;
     padding: 20px 35px;
 
@@ -34,7 +37,7 @@ body {
 
 .cal-screen {
     background: rgba(255, 255, 255, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(20, 20, 20, 0.3);
     box-shadow: 0 5px 10px rgba(35, 35, 35, 0.1);
     border-radius: 10px;
     color: darkslategray;
@@ -61,6 +64,7 @@ body {
     font-family: inherit;
     font-size: 24px;
     height: 65px;
+    transition: transform 0.2s;
 }
 
 .cal-button:last-child {
@@ -73,22 +77,36 @@ body {
 }
 
 .cal-button:last-child:hover {
-    background-color: inherit;
-    border: 2px solid crimson;
-    color: inherit;
-    box-shadow: 0px 0px 5px black;
+    background-color: white;
+    color: coral;
+    box-shadow: 0px 5px 10px rgba(220, 220, 220, 0.1);
 }
 
-.cal-button:hover{
-    border: 2px solid dodgerblue;
+.cal-button:hover {
+    transform: scale(1.1) translateY(-2px);
+    cursor: pointer;
     box-shadow: 0px 0px 5px whitesmoke;
-    background-color: inherit;
+    background-color: rgb(20, 20, 20);
+    color: rgb(235, 235, 235);
 }
 
-.clean{
-    flex-basis: 47%;
+.cal-button:last-child:active{
+    background-color: black;
+    color: white;
+    box-shadow: 0px 1px 5px whitesmoke;
 }
 
-.zero{
-    flex-basis: 73%;
+.cal-button:active{
+    background-color: rgba(255, 255, 255, 0.8);
+    color: rgb(20, 20, 20);
+    border: 1px solid rgba(20, 20, 20, 0.2);
+    box-shadow: 0 0 10px inset rgba(20, 20, 20, 0.2);
+}
+
+.clean {
+    flex: 0 1 47%;
+}
+
+.zero {
+    flex: 0 1 74%;
 }
