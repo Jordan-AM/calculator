@@ -1,6 +1,11 @@
 const screen = document.querySelector(".cal-screen");
 const numberRow = document.querySelector(".cal-buttons");
 
+let firstNumber = "";
+let secondNumber = "";
+let currentOperator = null;
+let shouldResetScreen = false;
+
 function isNumber(buttonPressed) {
   const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return numbers.includes(buttonPressed);
@@ -28,7 +33,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-  b === 0 ? "A number cannot be divided by 0." : a / b;
+  return b === 0 ? "A number cannot be divided by 0." : a / b;
 }
 
 function operate(operator, a, b) {
@@ -49,37 +54,122 @@ function operate(operator, a, b) {
   }
 }
 
+function roundResult(number) {
+  if (typeof number === "string") return number; // for divide by 0
+  return Math.round(number * 1000) / 1000;
+}
+
+function evaluate() {
+  if (currentOperator === null || shouldResetScreen) return;
+
+  const parts = screen.textContent.split(currentOperator);
+  secondNumber = parts[1] || "";
+
+  const result = operate(currentOperator, firstNumber, secondNumber);
+  screen.textContent = roundResult(result);
+  firstNumber = screen.textContent;
+  currentOperator = null;
+  shouldResetScreen = true;
+}
+
+
+function clearCalculator() {
+  screen.textContent = "0";
+  firstNumber = "";
+  secondNumber = "";
+  currentOperator = null;
+  shouldResetScreen = false;
+}
+
+function deleteLast() {
+  screen.textContent = screen.textContent.slice(0, -1) || "0";
+}
+
+function appendDecimal() {
+  if (shouldResetScreen) {
+    screen.textContent = "0";
+    shouldResetScreen = false;
+  }
+  if (!screen.textContent.includes(".")) {
+    screen.textContent += ".";
+  }
+}
+
 function handleButtonPress(event) {
   const buttonPressed = event.target.textContent;
 
-  // Add numbers to the screen
-  if (isNumber(buttonPressed) && screen.textContent === "0") {
-    screen.textContent = "";
-    screen.textContent += buttonPressed;
-  } else if (isNumber(buttonPressed)) {
+if (isNumber(buttonPressed)) {
+  if (screen.textContent === "0" || shouldResetScreen) {
+    screen.textContent = buttonPressed;
+    shouldResetScreen = false;
+  } else {
     screen.textContent += buttonPressed;
   }
-  // Clears the screen
+
+  // If operator is active, update secondNumber
+  if (currentOperator !== null) {
+    const parts = screen.textContent.split(currentOperator);
+    secondNumber = parts[1] || "";
+  }
+
+  return;
+}
+
+
+if (isOperator(buttonPressed)) {
+  if (currentOperator !== null) {
+    evaluate();
+  }
+  firstNumber = screen.textContent;
+  currentOperator = buttonPressed;
+  screen.textContent = firstNumber + currentOperator;
+  shouldResetScreen = false;
+  return;
+}
+
+
+  if (buttonPressed === "=") {
+    evaluate();
+    return;
+  }
+
   if (buttonPressed === "C") {
-    screen.textContent = "0";
+    clearCalculator();
+    return;
   }
-  // Handles backspace
-  if (buttonPressed === "←" && screen.textContent.length === 1) {
-    screen.textContent = "0";
+
+  if (buttonPressed === "←") {
+    deleteLast();
+    return;
   }
-  if (buttonPressed === "←" && screen.textContent.length > 1) {
-    screen.textContent = screen.textContent.slice(
-      0,
-      screen.textContent.length - 1
-    );
-  }
-  // Add operators
-  if (isOperator(buttonPressed) && screen.textContent !== "0") {
-    const lastChar = screen.textContent.slice(-1);
-    if (!isOperator(lastChar)) {
-      screen.textContent += buttonPressed;
-    }
+
+  if (buttonPressed === ".") {
+    appendDecimal();
+    return;
   }
 }
 
 numberRow.addEventListener("click", (event) => handleButtonPress(event));
+
+document.addEventListener("keydown", (e) => {
+  const keyMap = {
+    "+": "+",
+    "-": "−",
+    "*": "×",
+    "/": "÷",
+    Enter: "=",
+    Backspace: "←",
+    Escape: "C",
+    ".": "."
+  };
+
+  const mappedKey = keyMap[e.key] || e.key;
+
+  if (
+    isNumber(mappedKey) ||
+    isOperator(mappedKey) ||
+    ["=", "←", "C", "."].includes(mappedKey)
+  ) {
+    handleButtonPress({ target: { textContent: mappedKey } });
+  }
+});
