@@ -40,18 +40,12 @@ function operate(operator, a, b) {
   a = parseFloat(a);
   b = parseFloat(b);
 
-  switch (operator) {
-    case "+":
-      return add(a, b);
-    case "−":
-      return subtract(a, b);
-    case "×":
-      return multiply(a, b);
-    case "÷":
-      return divide(a, b);
-    default:
-      return null;
-  }
+  if (operator === "+") return add(a, b);
+  if (operator === "−") return subtract(a, b);
+  if (operator === "×") return multiply(a, b);
+  if (operator === "÷") return divide(a, b);
+
+  return null;
 }
 
 function roundResult(number) {
@@ -71,7 +65,6 @@ function evaluate() {
   currentOperator = null;
   shouldResetScreen = true;
 }
-
 
 function clearCalculator() {
   screen.textContent = "0";
@@ -98,35 +91,33 @@ function appendDecimal() {
 function handleButtonPress(event) {
   const buttonPressed = event.target.textContent;
 
-if (isNumber(buttonPressed)) {
-  if (screen.textContent === "0" || shouldResetScreen) {
-    screen.textContent = buttonPressed;
+  if (isNumber(buttonPressed)) {
+    if (screen.textContent === "0" || shouldResetScreen) {
+      screen.textContent = buttonPressed;
+      shouldResetScreen = false;
+    } else {
+      screen.textContent += buttonPressed;
+    }
+
+    // If operator is active, update secondNumber
+    if (currentOperator !== null) {
+      const parts = screen.textContent.split(currentOperator);
+      secondNumber = parts[1] || "";
+    }
+
+    return;
+  }
+
+  if (isOperator(buttonPressed)) {
+    if (currentOperator !== null) {
+      evaluate();
+    }
+    firstNumber = screen.textContent;
+    currentOperator = buttonPressed;
+    screen.textContent = firstNumber + currentOperator;
     shouldResetScreen = false;
-  } else {
-    screen.textContent += buttonPressed;
+    return;
   }
-
-  // If operator is active, update secondNumber
-  if (currentOperator !== null) {
-    const parts = screen.textContent.split(currentOperator);
-    secondNumber = parts[1] || "";
-  }
-
-  return;
-}
-
-
-if (isOperator(buttonPressed)) {
-  if (currentOperator !== null) {
-    evaluate();
-  }
-  firstNumber = screen.textContent;
-  currentOperator = buttonPressed;
-  screen.textContent = firstNumber + currentOperator;
-  shouldResetScreen = false;
-  return;
-}
-
 
   if (buttonPressed === "=") {
     evaluate();
@@ -160,7 +151,7 @@ document.addEventListener("keydown", (e) => {
     Enter: "=",
     Backspace: "←",
     Escape: "C",
-    ".": "."
+    ".": ".",
   };
 
   const mappedKey = keyMap[e.key] || e.key;

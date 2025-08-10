@@ -17,17 +17,18 @@ body {
     background: linear-gradient(90deg, rgb(67, 161, 255), skyblue, rgb(183, 219, 231));
     display: flex;
     height: 100%;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
 .calculator {
-    background:rgba(90, 225, 90, 0.5);
+    background: rgba(90, 225, 90, 0.5);
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    box-shadow: 
-    0 4px 10px 5px inset rgba(35, 35, 35, 0.2), 
-    0 5px 10px  rgba(01, 01, 01, 0.1);
+    box-shadow:
+        0 4px 10px 5px inset rgba(35, 35, 35, 0.2),
+        0 5px 10px rgba(01, 01, 01, 0.1);
     color: darkslategray;
     flex-basis: 420px;
     height: 540px;
@@ -90,13 +91,13 @@ body {
     color: rgb(235, 235, 235);
 }
 
-.cal-button:last-child:active{
+.cal-button:last-child:active {
     background-color: black;
     color: white;
     box-shadow: 0px 1px 5px whitesmoke;
 }
 
-.cal-button:active{
+.cal-button:active {
     background-color: rgba(255, 255, 255, 0.8);
     color: rgb(20, 20, 20);
     border: 1px solid rgba(20, 20, 20, 0.2);
@@ -109,4 +110,13 @@ body {
 
 .zero {
     flex: 0 1 74%;
+}
+
+.p-advise {
+    background-color: rgba(120, 120, 120, 0.1);
+    box-shadow: 0 0 5px -1px rgba(20, 20, 20, 0.2);
+    margin-top: 20px;
+    box-sizing: block;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
 }
