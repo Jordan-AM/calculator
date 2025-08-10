@@ -6,15 +6,29 @@ function isNumber(target) {
   return numbers.includes(target);
 }
 
-function addNumberToScreen(event) {
+function handleButtonPress(event) {
   const target = event.target;
-
+  // Add numbers to the screen
   if (isNumber(target.textContent) && screenText.textContent == "0") {
     screenText.textContent = "";
     screenText.textContent += target.textContent;
   } else if (isNumber(target.textContent)) {
     screenText.textContent += target.textContent;
   }
+  // Clears the screen
+  if (target.textContent === "C") {
+    screenText.textContent = "0";
+  }
+  // Handles backspace
+  if (target.textContent === "←" && screenText.textContent.length == 1) {
+    screenText.textContent = "0";
+  }
+  if (target.textContent === "←" && screenText.textContent.length > 1) {
+    screenText.textContent = screenText.textContent.slice(
+      0,
+      screenText.textContent.length - 1
+    );
+  }
 }
 
-numberRow.addEventListener("click", (event) => addNumberToScreen(event));
+numberRow.addEventListener("click", (event) => handleButtonPress(event));
