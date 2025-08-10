@@ -91,6 +91,7 @@ function appendDecimal() {
 function handleButtonPress(event) {
   const buttonPressed = event.target.textContent;
 
+  //number input
   if (isNumber(buttonPressed)) {
     if (screen.textContent === "0" || shouldResetScreen) {
       screen.textContent = buttonPressed;
@@ -99,7 +100,7 @@ function handleButtonPress(event) {
       screen.textContent += buttonPressed;
     }
 
-    // If operator is active, update secondNumber
+    // update secondNumber if operator is active
     if (currentOperator !== null) {
       const parts = screen.textContent.split(currentOperator);
       secondNumber = parts[1] || "";
@@ -108,10 +109,27 @@ function handleButtonPress(event) {
     return;
   }
 
+  // operator input
   if (isOperator(buttonPressed)) {
-    if (currentOperator !== null) {
-      evaluate();
+    const lastChar = screen.textContent.slice(-1);
+
+    // replace operator if pressed twice
+    if (isOperator(lastChar)) {
+      screen.textContent = screen.textContent.slice(0, -1) + buttonPressed;
+      currentOperator = buttonPressed;
+      return;
     }
+
+    // evaluate if there's a complete expression
+    if (currentOperator !== null) {
+      const parts = screen.textContent.split(currentOperator);
+      secondNumber = parts[1] || "";
+
+      if (secondNumber !== "") {
+        evaluate();
+      }
+    }
+
     firstNumber = screen.textContent;
     currentOperator = buttonPressed;
     screen.textContent = firstNumber + currentOperator;
@@ -139,6 +157,7 @@ function handleButtonPress(event) {
     return;
   }
 }
+
 
 numberRow.addEventListener("click", (event) => handleButtonPress(event));
 
