@@ -33,7 +33,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-  return b === 0 ? "Dividing by 0?" : a / b;
+  return b === 0 ? "0" : a / b;
 }
 
 function operate(operator, a, b) {
